@@ -1,0 +1,282 @@
+Task 1: Journeying Through Astronaut Profiles.
+We embark on an interstellar adventure, peering into the captivating lives of NASA's space explorers. Each line of code unveils tales of cosmic bravery, where data becomes the canvas for astronauts' remarkable journeys.
+
+As we execute this query, we're driven by the desire to inspire, inform, and honor their journeys. Each row of data represents a chapter in the grand story of space exploration, and by querying it, we're paying homage to their remarkable endeavors. We're doing this query to shed light on the heroes of the cosmic frontier and to share their awe-inspiring narratives with the world.
+
+Module 2 - Task 1
+
+Retrieving All Data.
+Select all columns in the table astronauts.
+
+Use the SQL SELECT statement to retrieve all records denoted by *.
+Specify the table to query, which is named 'astronauts'.
+
+SELECT * FROM astronauts;
+
+Task 2: Astronaut Status: Counting the Cosmic Pioneers.
+In the dim glow of computer screens, we embark on a journey to distill insights from data, transforming numbers into meaningful narratives. Our mission is to honor the dedication and diversity of cosmic pioneers, celebrating their contributions to humanity's quest for the stars.
+
+We embark on this journey to distill insights from data, transforming numbers into meaningful narratives. The query groups astronauts by their status, revealing the dynamic tapestry of their careers - active, retired, or otherwise.
+Module 2 - Task 2
+
+Counting Astronauts by Status.
+Find out the status of the astronaut.
+
+Use the SQL SELECT statement to retrieve specific columns: 'Status' and the count of records denoted as 'Number'.
+Specify the table to query, which is named 'astronauts'.
+Group the results by the 'Status' column using the GROUP BY clause.
+ 
+%%sql
+SELECT Status, COUNT(*)AS Number
+FROM astronauts
+GROUP BY Status;
+
+Task 3: Exploring Astronauts' Military Branch Diversity.
+In the soft glow of computer screens, we continue our exploration of the astronaut dataset, our journey of honoring cosmic pioneers and uncovering the stories that connect them to the stars.
+
+Our previous queries have illuminated the dynamic careers and diverse backgrounds of these space heroes. Now, we turn our attention to their military branches, a vital chapter in their incredible journeys.
+
+Module 2 - Task 3
+
+Counting Astronauts by Military Branch.
+Find out the Military Branch of the astronaut.
+
+Use the SQL SELECT statement to retrieve specific columns: 'Military_Branch' and the count of records denoted as 'Number'.
+Specify the table to query, which is named 'astronauts'.
+Group the results by the 'Military_Branch' column using the GROUP BY clause.
+%%sql
+SELECT Military_Branch,COUNT(*)AS Number
+FROM astronauts
+GROUP BY Military_Branch;
+
+Task 4: Top Military Ranks Among Astronauts.
+In the soft glow of computer screens, our cosmic journey through the astronaut dataset continues to unfold. Building upon our exploration of their military backgrounds, we now delve into the ranks that these celestial trailblazers once held in their respective armed forces.
+
+Module 2 - Task 4
+
+Top 5 Military Ranks Among Astronauts.
+Find out the top 5 military ranks of the astronaut.
+
+Use the SQL SELECT statement to retrieve specific columns: 'Military_Rank' and the count of records denoted as 'Number'.
+Specify the table to query, which is named 'astronauts'.
+Group the results by the 'Military_Rank' column using the GROUP BY clause.
+Sort the results in descending order based on the 'Number' column using the ORDER BY clause.
+Apply a limit to the results, showing only the top 5 rows using the LIMIT clause.
+%%sql
+SELECT Military_Rank ,COUNT(*)AS Number
+FROM astronauts
+GROUP BY Military_Rank
+ORDER BY Number DESC
+LIMIT 5;
+
+Task 5: Exploring Astronaut Demographics: Gender Insights.
+Our cosmic journey through the astronaut dataset takes another captivating turn. Building upon our exploration of their military backgrounds and ranks, we now shift our focus to a crucial aspect of their diverse profiles: gender.
+
+Module 2 - Task 5
+
+Count of Astronauts by Gender.
+Calculate the number of male and female astronauts.
+
+Use the SQL SELECT statement to retrieve specific columns: 'Gender' and the count of records denoted as 'Number'.
+Specify the table to query, which is named 'astronauts'.
+Group the results by the 'Gender' column using the GROUP BY clause.
+
+%%sql
+SELECT Gender,COUNT(*)AS Number
+FROM astronauts
+GROUP BY Gender;
+
+Task 6: Astronauts' Life Expectancy: A Cosmic Perspective
+As our cosmic journey through the astronaut dataset continues, we embark on a quest to understand the human lifespan within the realm of space exploration. Our focus now turns to the astronauts' life expectancies, a reflection of the profound experiences and challenges they've encountered.
+
+In this exploration, we pay tribute to the resilience and courage of these cosmic pioneers. Each astronaut's life expectancy, whether achieved or anticipated, is a testament to the unwavering spirit that propels humanity beyond Earth's bounds.
+
+Module 2 - Task 6
+
+Average Life Expectancy of Astronauts.
+What is the average life expectancy of an astronaut?
+
+Calculate the average life expectancy of astronauts.
+Create a subquery that calculates the life expectancy for each astronaut using conditional logic based on their 'Status' (Deceased or not).
+In the subquery:
+-If the 'Status' is 'Deceased,' calculate life expectancy by subtracting the birth year from the death year.
+-If the 'Status' is not 'Deceased,' calculate life expectancy by subtracting the birth year from the year 2023.
+-Alias the calculated life expectancy column as 'life_Expectancy' within the subquery.
+Compute the average of these calculated life expectancies rounded to the nearest whole number.
+The result is presented as 'Average_Life_Expectancy'.
+Hint: To extract the year from a date format, you can use the YEAR() method
+
+SELECT ROUND(AVG(life_Expectancy)) AS Average_Life_Expectancy
+FROM (
+    SELECT 
+        CASE 
+            WHEN Status = 'Deceased' THEN (YEAR(Death_Date) - CAST(Birth_Date AS SIGNED))
+            ELSE (2023 - CAST(Birth_Date AS SIGNED))
+        END AS life_Expectancy
+    FROM astronauts
+) AS life_expectancy_table;
+
+Task 7: Honoring Female Astronauts: Life Expectancy.
+In our ongoing journey through the astronaut dataset, we now shine a spotlight on a remarkable group of cosmic trailblazers—female astronauts. Their life expectancies, both achieved and anticipated, represent a testament to their extraordinary dedication and contribution to space exploration.
+
+Module 2 - Task 7
+
+Average Life Expectancy of Female Astronauts.
+What is the average life expectancy of a female astronaut?
+
+Calculate the average life expectancy of female astronauts.
+Create a subquery that calculates the life expectancy for each female astronaut using conditional logic based on their 'Status' (Deceased or not) and 'Gender.'
+In the subquery:
+-If the 'Status' is 'Deceased' and 'Gender' is 'Female,' calculate life expectancy by subtracting the birth year from the death year.
+-If the 'Status' is not 'Deceased' and 'Gender' is 'Female,' calculate life expectancy by subtracting the birth year from the year 2023.
+-Alias the calculated female life expectancy column as 'Female_life_Expectancy' within the subquery.
+Compute the average of these calculated female life expectancies rounded to the nearest whole number.
+The result is presented as 'Female_Average_Life_Expectancy.'
+Hint: To extract the year from a date format, you can use the YEAR() method.
+
+SELECT ROUND(AVG(Female_life_Expectancy)) AS Female_Average_Life_Expectancy
+FROM (
+    SELECT 
+        CASE 
+            WHEN Status = 'Deceased' AND Gender = 'Female' THEN (YEAR(Death_Date) - CAST(SUBSTRING(Birth_Date, -4) AS SIGNED))
+            WHEN Status != 'Deceased' AND Gender = 'Female' THEN (2023 - CAST(SUBSTRING(Birth_Date, -4) AS SIGNED))
+            ELSE NULL
+        END AS Female_life_Expectancy
+    FROM astronauts
+) AS female_life_expectancy_table;
+
+SELECT ROUND(AVG(Female_life_Expectancy)) AS Female_Average_Life_Expectancy
+FROM (
+    SELECT 
+        CASE 
+            WHEN Status = 'Deceased' AND Gender = 'Female' THEN (YEAR(Death_Date) - YEAR(Birth_Date))
+            WHEN Status != 'Deceased' AND Gender = 'Female' THEN (2023 - YEAR(Birth_Date))
+            ELSE NULL
+        END AS Female_life_Expectancy
+    FROM astronauts
+) AS female_life_expectancy_table;
+
+Task 8: Celebrating Male Astronauts: Life Expectancy.
+In our ongoing odyssey through the astronaut dataset, we now turn our attention to the remarkable group of male astronauts, who have left an indelible mark on the cosmos. The focus of our inquiry? Their life expectancies, a testament to their unyielding commitment and dedication to the exploration of space.
+
+Module 2 - Task 8
+
+Average Life Expectancy of Male Astronauts.
+What is the average life expectancy of a male astronaut?
+
+Calculate the average life expectancy of male astronauts.
+Create a subquery that calculates the life expectancy for each male astronaut using conditional logic based on their 'Status' (Deceased or not) and 'Gender.'
+In the subquery:
+-If the 'Status' is 'Deceased' and 'Gender' is 'Male,' calculate life expectancy by subtracting the birth year from the death year.
+-If the 'Status' is not 'Deceased' and 'Gender' is 'Male,' calculate life expectancy by subtracting the birth year from the year 2023.
+-Alias the calculated male life expectancy column as 'Male_life_Expectancy' within the subquery.
+Compute the average of these calculated male life expectancies rounded to the nearest whole number.
+The result is presented as 'Male_Average_Life_Expectancy'.
+Hint: To extract the year from a date format, you can use the YEAR() method.
+
+%%sql
+SELECT ROUND(AVG(Male_life_Expectancy)) AS Male_Average_Life_Expectancy
+FROM (
+    SELECT 
+        CASE 
+            WHEN Status = 'Deceased' AND Gender = 'Male' THEN (YEAR(Death_Date) - YEAR(Birth_Date))
+            WHEN Status != 'Deceased' AND Gender = 'Male' THEN (2023 - YEAR(Birth_Date))
+            ELSE NULL
+        END AS Male_life_Expectancy
+    FROM astronauts
+) AS Male_life_expectancy_table;
+
+Task 9: Cosmic Scholars: Top Graduate Majors of Astronauts.
+As our cosmic exploration through the astronaut dataset unfolds, we turn our focus to the educational pathways of these cosmic adventurers. With a keen eye on their graduate majors, we aim to uncover the diverse academic foundations that have propelled them into the boundless realms of space.
+
+This forthcoming query, though a mere compilation of data, is a portal to a world of knowledge. It reveals the top ten graduate majors, offering a glimpse into the educational tapestry that makes up the astronaut corps.
+
+Module 2 - Task 9
+
+Top 10 Graduate Majors Among Astronauts.
+Find out the top 10 educational backgrounds (graduates) that astronauts have.
+
+Use the SQL SELECT statement to retrieve specific columns: 'Graduate_Major' column and calculates the count of records, denoted as 'Number'.
+Specify the table to query, which is named 'astronauts'.
+Group the results by the 'Graduate_Major' column using the GROUP BY clause.
+Sort the results in descending order based on the count using the ORDER BY clause.
+Apply a limit to the results, showing only the top 10 'Graduate_Major' categories with the highest counts.
+
+SELECT Graduate_Major, COUNT(*) AS Number
+FROM astronauts
+GROUP BY Graduate_Major
+ORDER BY Number DESC
+LIMIT 10;
+
+Task 10: Educational Odyssey: Astronauts and Their Degrees.
+In our continuous journey through the astronaut dataset, we are now casting a wide net to encompass the full educational spectrum of these cosmic pioneers. The query we have set in motion is a treasure trove of information, offering us a profound glimpse into the academic odysseys that have propelled astronauts to the stars.
+
+As we meticulously examine these numbers, we are not merely dealing with data points; we are delving into the very essence of these space heroes. The "Number_of_Astronauts" figure serves as a testament to the exclusive fellowship of cosmic explorers, those who have boldly transcended the boundaries of Earth.
+
+Module 2 - Task 10
+
+Astronaut Education Statistics.
+Calculate the count of astronauts with undergraduate and graduate degrees.
+
+Calculate the total count of astronauts and alias it as 'Number_of_Astronauts.'
+Calculate the count of astronauts with undergraduate degrees and alias it as 'Astronauts_with_Undergraduate_Degrees.'
+Calculate the count of astronauts with graduate degrees and alias it as 'Astronauts_with_Graduate_Degrees.'
+Retrieve this information from the 'astronauts' table.
+ 
+%%sql
+SELECT COUNT(*)AS Number_of_Astronauts,
+COUNT(Undergraduate_Major)AS Astronauts_with_Undergraduate_Degrees,
+COUNT(Graduate_Major)AS Astronauts_with_Graduate_Degrees
+FROM astronauts;
+
+Task 11: Astronaut Birthplaces: Launching from Earth's Diverse Cities.
+In our cosmic journey through the astronaut dataset, we now turn our gaze to the birthplaces of these intrepid space explorers. The query we've embarked upon, though a collection of data, is a portal to the origins of those who've ventured into the boundless cosmos.
+
+As we dissect the numbers, we're not just dealing with statistics; we're unraveling the geographic tapestry that contributes to the astronaut corps. The birth states that emerge as the top five hold within them the beginnings of remarkable journeys.
+
+Each city represents a unique chapter in the story of these cosmic pioneers. From bustling metropolises to quiet towns, these diverse origins reflect the universal aspiration to reach for the stars.
+
+Module 2 - Task 11
+
+Top 5 States of Birth for Astronauts.
+Find out the top 5 countries/states from which astronauts come.
+
+Extract the state name from the 'Birth_Place' column and alias it as 'STATE.'
+Calculate the count of astronauts born in each state.
+Retrieve this information from the 'astronauts' table.
+Group the results by the 'STATE' column.
+Sort the results in descending order based on the count.
+Display only the top 5 states with the highest counts of astronauts.
+Hint: To extract the state from the 'Birth_Place' column, you can use SUBSTRING_INDEX(Birth_Place, ',', -1) to get the last part of the 'Birth_Place' string, which is the state. Please note that there should be no space after the delimiter (',').
+ 
+%%sql
+SELECT SUBSTRING_INDEX(Birth_Place, ',', -1)AS State,
+COUNT(*)AS Number
+FROM astronauts
+GROUP BY State
+ORDER BY Number DESC
+LIMIT 5;
+
+ask 12: Voyages Beyond: Astronauts' Space Flights and Spacewalks.
+As our voyage through the astronaut dataset unfolds, we now set our sights on the extraordinary journeys that these cosmic pioneers have undertaken. The query we've embarked upon holds within it a wealth of experiences, a testament to the adventurous spirit of those who've ventured into the cosmos.
+
+Our calculations of the average number of space flights and spacewalks provide insight into the vast range of missions and activities these astronauts have undertaken. Each decimal point in the result represents another moment in space, another step taken in the weightlessness of the cosmos.
+
+These averages tell the story of dedication, training, and the relentless pursuit of scientific discovery and exploration. The numbers, though abstract, are a reflection of the countless hours of preparation and the courage required to journey beyond our planet.
+
+Module 2 - Task 12
+
+Average Space Flights and Spacewalks per Astronaut.
+Find out the average number of space flights and spacewalks for astronauts.
+
+Calculate the average number of space flights among astronauts, and alias it as 'Average_Number_Of_Space_Flight.'
+Calculate the average number of spacewalks among astronauts, and alias it as 'Average_Number_Of_Space_Walks.'
+Round both of these calculated averages to two decimal places.
+Retrieve this information from the 'astronauts' table.
+ 
+%%sql
+SELECT ROUND(AVG(Space_Flights),2)AS Average_Number_Of_Space_Flight,
+ROUND(AVG(Space_Walks),2)AS Average_Number_Of_Space_Walks
+FROM astronauts;
+
+ 

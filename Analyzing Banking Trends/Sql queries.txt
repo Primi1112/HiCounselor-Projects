@@ -1,0 +1,216 @@
+1. Write an SQL query to solve the given problem statement.
+ List all regions along with the number of users assigned to each region.
+
+SELECT
+    wr.region_name AS Region,
+    COUNT(DISTINCT un.consumer_id) AS Number_of_Users
+FROM
+    world_regions wr
+LEFT JOIN
+    user_nodes un ON wr.region_id = un.region_id
+GROUP BY
+    wr.region_name
+ORDER BY
+    wr.region_name;
+
+2. Write an SQL query to solve the given problem statement.
+Find the user who made the largest deposit amount and the transaction type for that deposit.
+SELECT
+    ut.consumer_id AS consumer_id,
+    'deposit' AS transaction_type,
+    max_deposit.largest_deposit
+FROM
+    user_transaction ut
+JOIN (
+    SELECT
+        MAX(transaction_amount) AS largest_deposit
+    FROM
+        user_transaction
+    WHERE
+        transaction_type = 'deposit'
+) max_deposit
+ON ut.transaction_amount = max_deposit.largest_deposit
+WHERE
+    ut.transaction_type = 'deposit';
+3. Write an SQL query to solve the given problem statement.
+Calculate the total amount deposited for each user in the "Europe" region.
+
+SELECT user_nodes.consumer_id ,SUM(user_transaction.transaction_amount)AS total_amount_deposit
+FROM user_nodes
+JOIN world_regions ON user_nodes.region_id = world_regions.region_id
+JOIN user_transaction ON user_transaction.consumer_id = user_nodes.consumer_id
+WHERE world_regions.region_name ='Europe ' AND user_transaction.transaction_type ='deposit'
+GROUP BY user_nodes.consumer_id;
+
+4.Write an SQL query to solve the given problem statement.
+Calculate the total number of transactions made by each user in the "United States" region.
+SELECT user_nodes.consumer_id ,COUNT(user_transaction.consumer_id)AS num_transactions
+FROM user_nodes
+JOIN world_regions ON user_nodes.region_id = world_regions.region_id
+JOIN user_transaction ON user_transaction.consumer_id = user_nodes.consumer_id
+WHERE world_regions.region_name ='United States ' 
+GROUP BY user_nodes.consumer_id;
+
+5.Write an SQL query to solve the given problem statement.
+Calculate the total number of users who made more than 5 transactions.
+SELECT
+    consumer_id,
+    COUNT(*) AS num_transactions
+FROM
+    user_transaction
+GROUP BY
+    consumer_id
+HAVING
+    COUNT(*) > 5
+6. Write an SQL query to solve the given problem statement.
+Find the regions with the highest number of nodes assigned to them.
+
+SELECT
+    wr.region_name,
+    COUNT(wn.node_id) AS num_nodes
+FROM
+    user_nodes wn
+JOIN
+    world_regions wr ON wn.region_id = wr.region_id
+GROUP BY
+    wr.region_name
+ORDER BY
+    num_nodes DESC
+LIMIT 5;
+
+7. Write an SQL query to solve the given problem statement.
+Find the user who made the largest deposit amount in the "Australia" region.
+
+WITH AustraliaDeposits AS (
+	SELECT
+		un.consumer_id,
+        un.region_id,
+        ut.transaction_amount
+	FROM
+		user_nodes un
+	JOIN
+		world_regions wr
+	ON
+		un.region_id = wr.region_id
+	JOIN
+		user_transaction ut
+	ON
+		un.consumer_id = ut.consumer_id
+	WHERE
+		wr.region_name = "Australia"
+        AND ut.transaction_type = "deposit"
+)
+SELECT
+	DISTINCT(ad.consumer_id),
+    ad.transaction_amount as largest_deposit
+FROM
+	AustraliaDeposits ad
+WHERE
+	ad.transaction_amount IN (SELECT MAX(ad.transaction_amount) FROM AustraliaDeposits ad);
+8. Write an SQL query to solve the given problem statement.
+Calculate the total amount deposited by each user in each region.
+
+SELECT user_nodes.consumer_id,world_regions.region_name ,SUM(user_transaction.transaction_amount)AS total_amount_deposit
+FROM user_nodes
+JOIN user_transaction ON user_nodes.consumer_id = user_transaction.consumer_id
+JOIN world_regions ON user_nodes.region_id = world_regions.region_id
+WHERE user_transaction.transaction_type ='deposit'
+GROUP BY user_nodes.consumer_id,world_regions.region_name;
+
+9. Write an SQL query to solve the given problem statement.
+Retrieve the total number of transactions for each region
+
+
+SELECT world_regions.region_name ,COUNT(*)AS total_amount_deposit
+FROM user_nodes
+JOIN user_transaction ON user_nodes.consumer_id = user_transaction.consumer_id
+JOIN world_regions ON user_nodes.region_id = world_regions.region_id
+GROUP BY region_name;
+
+10.Write an SQL query to solve the given problem statement.
+Write a query to find the total deposit amount for each region (region_name) in the user_transaction table. Consider only those transactions where the consumer_id is associated with a valid region in the user_nodes table. 
+
+SELECT world_regions.region_name,SUM(user_transaction.transaction_amount)AS total_deposit_amount
+FROM user_nodes
+JOIN user_transaction ON user_nodes.consumer_id = user_transaction.consumer_id
+JOIN world_regions ON user_nodes.region_id = world_regions.region_id
+WHERE user_transaction.transaction_type ='deposit'
+GROUP BY world_regions.region_name;
+
+11. Write an SQL query to solve the given problem statement.
+Write a query to find the top 5 consumers who have made the highest total transaction amount (sum of all their deposit transactions) in the user_transaction table.
+SELECT
+	consumer_id,
+    SUM(transaction_amount) AS total_transaction_amount
+FROM
+	user_transaction ut
+WHERE
+	ut.transaction_type = 'deposit'
+GROUP BY
+	consumer_id
+ORDER BY
+	total_transaction_amount DESC
+LIMIT 5;
+
+12. Write an SQL query to solve the given problem statement.
+How many consumers are allocated to each region?
+SELECT
+	un.region_id,
+    wr.region_name,
+    COUNT(DISTINCT un.consumer_id) AS num_of_consumers
+FROM
+	user_nodes un
+JOIN
+	world_regions wr
+ON
+	un.region_id = wr.region_id
+GROUP BY
+	un.region_id,
+    wr.region_name;
+
+13. Write an SQL query to solve the given problem statement.
+What is the unique count and total amount for each transaction type?
+
+SELECT
+	transaction_type,
+    COUNT(DISTINCT consumer_id) AS num_transactions,
+    SUM(transaction_amount) AS total_amount
+FROM
+	user_transaction
+GROUP BY
+	transaction_type;
+14. Write an SQL query to solve the given problem statement.
+What are the average deposit counts and amounts for each transaction type ('deposit') across all customers, grouped by transaction type?
+
+WITH avg_deposit AS (
+	SELECT 
+		transaction_type,
+		COUNT(transaction_type) AS deposit_count,
+		SUM(transaction_amount) AS deposit_amount
+	FROM user_transaction
+	WHERE transaction_type = 'deposit'
+	GROUP BY consumer_id
+)
+SELECT 
+	transaction_type,
+    ROUND(AVG(deposit_count),0) AS avg_deposit_count,
+	ROUND(AVG(deposit_amount),0) AS avg_deposit_amount
+FROM avg_deposit;
+
+15. /* Task 15
+How many transactions were made by consumers from each region?*/
+
+    wr.region_name,
+    COUNT(*) AS total_transactions
+FROM
+    user_nodes un
+JOIN
+    user_transaction ut
+ON
+    un.consumer_id = ut.consumer_id
+JOIN
+	world_regions wr
+ON
+	un.region_id = wr.region_id
+GROUP BY
+    wr.region_name;
